@@ -79,12 +79,12 @@ def main():
         selected_digit = st.selectbox(
             "Select digit to generate:",
             options=list(range(10)),
-            index=0
-        )
+            index=0        )
     
     with col2:
         if st.button("🎲 Random Digit"):
-            selected_digit = np.random.randint(0, 10)
+            import random
+            selected_digit = random.randint(0, 9)
             st.success(f"Random digit selected: {selected_digit}")
     
     with col3:
