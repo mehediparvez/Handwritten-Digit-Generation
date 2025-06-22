@@ -23,12 +23,11 @@ def load_model():
         # Try to load the trained model
         generator.load_state_dict(torch.load('generator_model.pth', map_location=device))
         generator.eval()
-        return generator, True
+        return generator
     except FileNotFoundError:
         # If no trained model, use untrained model (for demo purposes)
-        st.warning("⚠️ No trained model found. Using untrained model for demonstration.")
         generator.eval()
-        return generator, False
+        return generator
 
 def generate_digit_images(generator, digit, num_images=5):
     """Generate specified number of images for a given digit"""
@@ -67,31 +66,28 @@ def main():
     st.markdown("Generate realistic handwritten digits using a trained Conditional GAN!")
     
     # Load model
-    generator, is_trained = load_model()
+    generator = load_model()
     
     # Main content
     st.header("Generate Handwritten Digits")
     
     # Digit selection in main view
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2 = st.columns([1, 1])
     
     with col1:
         selected_digit = st.selectbox(
             "Select digit to generate:",
             options=list(range(10)),
-            index=0        )
+            index=0
+        )
     
     with col2:
-        if st.button("🎲 Random Digit"):
+        # Add some spacing to align the button with the selectbox
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🎲 Random Digit", use_container_width=True):
             import random
             selected_digit = random.randint(0, 9)
             st.success(f"Random digit selected: {selected_digit}")
-    
-    with col3:
-        if is_trained:
-            st.success("✅ Using trained model")
-        else:
-            st.warning("⚠️ Using untrained model")
     
     st.markdown(f"### Generating Digit: **{selected_digit}**")
     
